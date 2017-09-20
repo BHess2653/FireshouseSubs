@@ -1,29 +1,48 @@
-var mongoose = require('mongoose');
-
 const NODE_ENV = process.env.NODE_ENV || 'development'
 
 if(NODE_ENV === 'development') {
   require('dotenv').load()
 }
 
-if(NODE_ENV === 'development') {
-  console.log('IM HEREE!!!!!!!! ', NODE_ENV )
-  mongoose.connect('mongodb://'+ process.env.MONGO_HOST +'/'+ process.env.MONGO_DATABASE)
-} else {
-  mongoose.connect(process.env.MONGODB_URI,  function (err, database) {
-    if (err) {
-      console.log(err);
-      process.exit(1);
-    }
-  })
-}
+const Sequelize = require('sequelize');
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'conection error: '))
-db.once('open', ()=>{
-  console.log('database conecction 👍🏼')
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+  host: process.env.DB_HOST,
+  dialect: process.env.DB_SCHEMA,
+  port: process.env.DB_PORT,
+  pool: {
+    max: 5,
+    min: 0,
+    idle: 10000,
+  },
+  logging: false,
+});
+
+const product = sequelize.define('product', {
+  name: {
+    type: Sequelize.STRING,
+  },
+  price: {
+    type: Sequelize.INTEGER,
+  }
+});
+
+const order = sequelize.define('order', {
+  name: {
+    type: Sequelize.STRING,
+  },
+  total: {
+    type: Sequelize.INTEGER,
+  },
+});
+
+order.hasMany(product, {
+  foreignKey: 'orderID',
 })
 
-mongoose.Promise = global.Promise
 
-module.export =db
+sequelize.sync();
+
+exports.sequelize = sequelize;
+exports.product = product;
+exports.order = order;
