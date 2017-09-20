@@ -34,7 +34,7 @@ const order = sequelize.define('order', {
 });
 
 product.belongsToMany(order, {
-  foreignKey: 'orderProducts',
+  through: 'orderProducts',
 })
 
 
