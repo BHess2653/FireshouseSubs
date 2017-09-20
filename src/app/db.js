@@ -28,16 +28,13 @@ const product = sequelize.define('product', {
 });
 
 const order = sequelize.define('order', {
-  name: {
-    type: Sequelize.STRING,
-  },
   total: {
     type: Sequelize.INTEGER,
-  },
+  }
 });
 
-order.hasMany(product, {
-  foreignKey: 'orderID',
+product.belongsToMany(order, {
+  foreignKey: 'orderProducts',
 })
 
 
