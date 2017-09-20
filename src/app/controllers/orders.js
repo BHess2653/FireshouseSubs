@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 // Importing Models
-const Product = mongoose.model('Product');
-const Order = mongoose.model('Order');
+// const Product = mongoose.model('Product');
+// const Order = mongoose.model('Order');
 
 module.exports = function(app){
 	app.use('/api/v1', router);
@@ -12,9 +12,9 @@ module.exports = function(app){
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Get Orders
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-  router.get('/order', (req, res) => {    
+  router.get('/order', (req, res) => {
     Order.find()
-      .populate('product_id') 
+      .populate('product_id')
       .exec(function(err, product){
         res.json(product)
       });
@@ -36,7 +36,7 @@ module.exports = function(app){
     Order.findById(req.params.orderID, (err, docs) => {
       console.log("DOCS REURNED--- ",docs)
       res.json(docs)
-    }).populate('product_id') 
+    }).populate('product_id')
 
   })
 
@@ -58,7 +58,7 @@ module.exports = function(app){
           if(err) return res.send(err);
             res.json(order);
           })
-        }      
+        }
       })
     })
   })
@@ -87,7 +87,7 @@ module.exports = function(app){
           })
         }
       })
-    })    
+    })
   })
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,4 +102,3 @@ module.exports = function(app){
 
   return router;
 }
-
